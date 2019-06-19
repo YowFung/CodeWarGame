@@ -6,7 +6,7 @@
 
 ### 演示视频
 
-戳这里观看该游戏运行的演示视频：[https://www.bilibili.com/video/av56112017/](
+戳这里观看该游戏运行的演示视频：[https://www.bilibili.com/video/av56112017/](https://www.bilibili.com/video/av56112017/)
 
 
 
