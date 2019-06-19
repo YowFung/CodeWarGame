@@ -6,8 +6,8 @@ from pygame.locals import *
 GAME_NAME = "代码大战之高空战神"
 
 # 坐标及尺寸配置
-SCREEN_WIDTH = 360			# 窗口宽度
-SCREEN_HEIGHT = 500			# 窗口高度
+SCREEN_WIDTH = 576			# 窗口宽度
+SCREEN_HEIGHT = 800			# 窗口高度
 DEFAULT_HERO_POS = 180		# 主角默认位置
 
 # 时钟配置

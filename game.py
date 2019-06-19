@@ -21,9 +21,9 @@ class Game(object):
 	MENU_TYPE_OVER = 1			# 游戏结束后的菜单
 
 	# 定义类常量：菜单按钮
-	MENU_BTN_START = 0			# “开始游戏” 按钮
+	MENU_BTN_START = 1			# “开始游戏” 按钮
 	MENU_BTN_AGAIN = 1			# “再来一次” 按钮
-	MENU_BTN_EXIT = 2			# “退出游戏” 按钮
+	MENU_BTN_EXIT = 0			# “退出游戏” 按钮
 
 	# 定义类常量：音效类型
 	SOUND_TYPE_READY_GO = 0		# ready go
@@ -53,6 +53,7 @@ class Game(object):
 
 		# 加载背景图片
 		self.bg = pygame.image.load(config.IMG_BG_WAIT)
+		self.bg = pygame.transform.scale(self.bg, (self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT))
 		self.screen.blit(self.bg, (0, 0))
 
 		# 加载背景音乐并播放
@@ -126,17 +127,16 @@ class Game(object):
 			# 更新时钟
 			self.clock.tick(self.config.FPS)
 
-	def _create_btn(self, btn_id, y_pos, sel=False):
+	def _create_btn(self, btn_id, sel=False):
 		"""
 		创建菜单按钮
 		:param btn_id:		按钮 ID
-		:param y_pos: 		垂直方向坐标
 		:param sel:			是否被选中
 		:return:			{btn object}
 		"""
-		if btn_id == self.MENU_BTN_START:
+		if btn_id == self.MENU_BTN_START and self.status == self.STATUS_WAIT:
 			img = self.config.IMG_MENU_START_SEL if sel else self.config.IMG_MENU_START_DEF
-		elif btn_id == self.MENU_BTN_AGAIN:
+		elif btn_id == self.MENU_BTN_AGAIN and self.status == self.STATUS_OVER:
 			img = self.config.IMG_MENU_AGAIN_SEL if sel else self.config.IMG_MENU_AGAIN_DEF
 		elif btn_id == self.MENU_BTN_EXIT:
 			img = self.config.IMG_MENU_EXIT_SEL if sel else self.config.IMG_MENU_EXIT_DEF
@@ -147,14 +147,14 @@ class Game(object):
 		w = img.get_rect()[2]
 		h = img.get_rect()[3]
 		x = self.config.SCREEN_WIDTH/2 - w/2
-		y = y_pos - h/2
+		y = self.config.SCREEN_HEIGHT*0.8 - (h+10)*btn_id
 
 		return {
 			"img": img,
 			"width": w,
 			"height": h,
 			"x_pos": x + w/2,
-			"y_pos": y_pos,
+			"y_pos": y - h/2,
 			"seleted": sel
 		}
 
@@ -182,7 +182,7 @@ class Game(object):
 			text = u"-- [W] [S] [A] [D] [Space] --"
 			surface = font.render(text, True, self.config.FONT_HELP['color'])
 			x = self.config.SCREEN_WIDTH/2 - surface.get_rect()[2]/2
-			y = self.config.SCREEN_HEIGHT - 60
+			y = self.config.SCREEN_HEIGHT*0.85
 			self.screen.blit(surface, (x, y))
 
 		# 如果游戏即将开始
@@ -306,15 +306,15 @@ class Game(object):
 
 		# 显示等待状态时的菜单
 		if menu_type == self.MENU_TYPE_WAIT:
-			btn1 = self._create_btn(self.MENU_BTN_START, 300, sel_btn == self.MENU_BTN_START)
-			btn2 = self._create_btn(self.MENU_BTN_EXIT, 380, sel_btn == self.MENU_BTN_EXIT)
+			btn1 = self._create_btn(self.MENU_BTN_START, sel_btn == self.MENU_BTN_START)
+			btn2 = self._create_btn(self.MENU_BTN_EXIT, sel_btn == self.MENU_BTN_EXIT)
 			self.menu_btns.append(btn1)
 			self.menu_btns.append(btn2)
 
 		# 显示游戏结束时的菜单
 		if menu_type == self.MENU_TYPE_OVER:
-			btn1 = self._create_btn(self.MENU_BTN_AGAIN, 300, sel_btn == self.MENU_BTN_AGAIN)
-			btn2 = self._create_btn(self.MENU_BTN_EXIT, 380, sel_btn == self.MENU_BTN_EXIT)
+			btn1 = self._create_btn(self.MENU_BTN_AGAIN, sel_btn == self.MENU_BTN_AGAIN)
+			btn2 = self._create_btn(self.MENU_BTN_EXIT, sel_btn == self.MENU_BTN_EXIT)
 			self.menu_btns.append(btn1)
 			self.menu_btns.append(btn2)
 
